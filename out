@@ -8,13 +8,14 @@ exec 1>&2
 #
 # Get parameters from the pipeline
 #
-payload=$(cat <&0)
 
+payload=$(cat <&0)
 
 BOT_TOKEN=$(echo $payload | jq -r '(.source.bot_token // "")')
 text="$(echo $payload | jq '(.params.text // "text is empty")')"
 CHAT_ID="$(echo $payload | jq -r '(.params.chat_id // "")')"
 PROXY="$(echo $payload | jq -r '(.source.proxy // "")')"
+
 
 #
 # Check mandatory parameters
@@ -30,7 +31,7 @@ if [ -z "$CHAT_ID" ]; then
 fi
 
 if [ -n "$PROXY" ]; then
-    https_proxy=$PROXY
+    https_proxy="-x $PROXY "
 fi
 
 #
@@ -38,7 +39,7 @@ fi
 #
 text="$(eval printf ${text} )"
 URL="https://api.telegram.org/bot${BOT_TOKEN}/sendMessage"
-curl -X POST --data chat_id=${CHAT_ID//\"/} --data text="${text}" --data parse_mode=Markdown "$URL"
+curl -X POST $https_proxy --data chat_id=${CHAT_ID//\"/} --data text="${text}" --data parse_mode=Markdown "$URL"
 
 #
 # Return version
