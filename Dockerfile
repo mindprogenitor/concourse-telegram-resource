@@ -1,4 +1,4 @@
-FROM concourse/buildroot:curl-jq
+FROM concourse/buildroot:curl
 
 ADD check /opt/resource/check
 ADD in /opt/resource/in
