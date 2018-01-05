@@ -14,7 +14,7 @@ payload=$(cat <&0)
 BOT_TOKEN=$(echo $payload | jq -r '(.source.bot_token // "")')
 text="$(echo $payload | jq '(.params.text // "text is empty")')"
 CHAT_ID="$(echo $payload | jq -r '(.params.chat_id // "")')"
-PROXY="$(echo $payload | jq -r '(.params.chat_id // "")')"
+PROXY="$(echo $payload | jq -r '(.source.proxy // "")')"
 
 #
 # Check mandatory parameters
